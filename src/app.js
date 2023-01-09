@@ -86,7 +86,7 @@ server.post('/tweets', (req, res) => {
     }
 });
 
-server.get('/tweets/:usename', (req, res) => {
+server.get('/tweets/:username', (req, res) => {
     //armazena o parâmetro da requisição na variável username
     const { username } = req.params;
 
