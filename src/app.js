@@ -21,6 +21,12 @@ server.post('/sign-up', (req, res) => {
         return;
     }
 
+    //verifica se são strings
+    const isInputString = (typeof username === 'string' && typeof avatar === 'string');
+    if(!isInputString){
+        return res.sendStatus(400);
+    }
+
     //verifica se o usuário já existe ou não
     const userExists = users.find((user) => user.username === username);
     //caso exista, userExists vai ficar preenchido com o objeto daquele usuario
@@ -57,10 +63,16 @@ server.post('/tweets', (req, res) => {
     const username = req.headers.user;
     const { tweet } = req.body;
 
-    //validação
+    //validação de preenchimento de campos
     if(!username || !tweet){
         res.status(400).send({error:`Todos os campos são obrigatórios!`});
         return;
+    }
+
+    //validação de string
+    const isInputString = (typeof tweet === 'string');
+    if(!isInputString){
+        return res.sendStatus(400);
     }
 
     const userExists = users.find((user) => user.username === username);
