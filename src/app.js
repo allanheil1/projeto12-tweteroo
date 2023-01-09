@@ -86,4 +86,14 @@ server.post('/tweets', (req, res) => {
     }
 });
 
+server.get('/tweets/:usename', (req, res) => {
+    //armazena o parâmetro da requisição na variável username
+    const { username } = req.params;
+
+    //filtra os tweets, retornando apenas os do usuário especificado
+    const userTweets = tweets.filter((t) => t.username === username);
+    //responde com os tweets de usuário
+    res.send(userTweets);
+})
+
 server.listen(PORT, () => console.log(`listening on port ${5000}`));
