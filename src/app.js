@@ -17,8 +17,7 @@ server.post('/sign-up', (req, res) => {
 
     //verifica se os campos foram preenchidos:
     if(!username || !avatar){
-        res.status(400).send({ message: 'Todos os campos são obrigatórios!' });
-        return;
+        return res.status(400).send({ message: 'Todos os campos são obrigatórios!' });
     }
 
     //verifica se são strings
@@ -33,7 +32,7 @@ server.post('/sign-up', (req, res) => {
 
     //caso achamos um usuário existente, retorna um erro
     if(userExists){
-        res.status(400).send({ message: 'Usuário já existente!' });
+        return res.status(400).send({ message: 'Usuário já existente!' });
     }
 
     users.push({ username, avatar });
@@ -65,8 +64,7 @@ server.post('/tweets', (req, res) => {
 
     //validação de preenchimento de campos
     if(!username || !tweet){
-        res.status(400).send({error:`Todos os campos são obrigatórios!`});
-        return;
+        return res.status(400).send({error:`Todos os campos são obrigatórios!`});
     }
 
     //validação de string
@@ -82,8 +80,7 @@ server.post('/tweets', (req, res) => {
 
         console.log(tweets);
     
-        res.status(201).send({ message: 'OK' });
-        return;
+        return res.status(201).send({ message: 'OK' });
     }else{
         return res.status(401).send("UNAUTHORIZED");
     }
