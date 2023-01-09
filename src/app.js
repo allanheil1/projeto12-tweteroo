@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { application } from 'express';
 import cors from 'cors';
 
 const server = express();
@@ -17,7 +17,8 @@ server.post('/sign-up', (req, res) => {
 
     //verifica se os campos foram preenchidos:
     if(!username || !avatar){
-        return res.status(400).send({ message: 'Todos os campos são obrigatórios!' })
+        res.status(400).send({ message: 'Todos os campos são obrigatórios!' });
+        return;
     }
 
     //verifica se o usuário já existe ou não
@@ -32,5 +33,48 @@ server.post('/sign-up', (req, res) => {
     users.push({ username, avatar });
 
     res.status(201).send({ message: 'OK' });
-})
+});
 
+server.get('/tweets', (req, res)=> {
+    //pra cada tweet, buscamos o avatar do usuário
+    tweets.forEach((t) => {
+        const { avatar } = users.find((user) => user.username === t.username);
+        //atribuição
+        t.avatar = avatar;
+    })
+
+    //separa apenas os últimos 10 tweets
+    const lastTenTweets = tweets.slice(-10);
+
+    //retorna os últimos 10 tweets
+    res.send(lastTenTweets);
+
+});
+
+server.post('/tweets', (req, res) => {
+    console.log(req.body);
+
+    const username = req.headers.user;
+    const { tweet } = req.body;
+
+    //validação
+    if(!username || !tweet){
+        res.status(400).send({error:`Todos os campos são obrigatórios!`});
+        return;
+    }
+
+    const userExists = users.find((user) => user.username === username);
+
+    if(userExists){
+        tweets.push({username, tweet});
+
+        console.log(tweets);
+    
+        res.status(201).send({ message: 'OK' });
+        return;
+    }else{
+        return res.status(401).send("UNAUTHORIZED");
+    }
+});
+
+server.listen(PORT, () => console.log(`listening on port ${5000}`));
